@@ -18,6 +18,7 @@ ALLOWED_HOSTS = ['*']
 LOCAL_APPS = [
     'devopshobbies.core.apps.CoreConfig',
     'devopshobbies.common.apps.CommonConfig',
+    'devopshobbies.blog.apps.BlogConfig',
 ]
 
 THIRD_PARTY_APPS = [
