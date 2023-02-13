@@ -19,6 +19,7 @@ LOCAL_APPS = [
     'devopshobbies.core.apps.CoreConfig',
     'devopshobbies.common.apps.CommonConfig',
     'devopshobbies.blog.apps.BlogConfig',
+    'devopshobbies.users.apps.UsersConfig',
 ]
 
 THIRD_PARTY_APPS = [
