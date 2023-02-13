@@ -10,7 +10,6 @@ from devopshobbies.api.mixins import ApiAuthMixin
 from devopshobbies.users.selectors import get_profile
 from devopshobbies.users.services import register 
 
-
 from drf_spectacular.utils import extend_schema
 
 
@@ -46,6 +45,7 @@ class RegisterApi(APIView):
         def validate_email(self, email):
             if BaseUser.objects.filter(email=email).exists():
                 raise serializers.ValidationError("email Already Taken")
+            return email
 
         def validate(self, data):
             if not data.get("password") or not data.get("confirm_password"):
@@ -53,19 +53,20 @@ class RegisterApi(APIView):
             
             if data.get("password") != data.get("confirm_password"):
                 raise serializers.ValidationError("confirm password is not equal to password")
+            return data
 
 
     class OutPutRegisterSerializer(serializers.ModelSerializer):
         class Meta:
             model = BaseUser 
-            fields = ("email")
+            fields = ("email", "created_at", "updated_at")
 
     @extend_schema(request=InputRegisterSerializer, responses=OutPutRegisterSerializer)
     def post(self, request):
-        serializer = self.InputSerializer(data=request.data)
+        serializer = self.InputRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            query = register(
+            user = register(
                     email=serializer.validated_data.get("email"),
                     password=serializer.validated_data.get("password"),
                     bio=serializer.validated_data.get("bio"),
@@ -75,5 +76,5 @@ class RegisterApi(APIView):
                     f"Database Error {ex}",
                     status=status.HTTP_400_BAD_REQUEST
                     )
-        return Response(self.OutPutRegisterSerializer(query, context={"request":request}).data)
+        return Response(self.OutPutRegisterSerializer(user, context={"request":request}).data)
 
