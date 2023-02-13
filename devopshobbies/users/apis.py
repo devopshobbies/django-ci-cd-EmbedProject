@@ -59,9 +59,22 @@ class RegisterApi(APIView):
 
     class OutPutRegisterSerializer(serializers.ModelSerializer):
 
+        token = serializers.SerializerMethodField("get_token")
+
         class Meta:
             model = BaseUser 
-            fields = ("email", "created_at", "updated_at")
+            fields = ("email", "token", "created_at", "updated_at")
+
+        def get_token(self, user):
+            data = dict()
+            token_class = RefreshToken
+
+            refresh = token_class.for_user(user)
+
+            data["refresh"] = str(refresh)
+            data["access"] = str(refresh.access_token)
+
+            return data
 
 
     @extend_schema(request=InputRegisterSerializer, responses=OutPutRegisterSerializer)
