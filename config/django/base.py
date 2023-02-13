@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#AUTH_USER_MODEL = 'users.BaseUser'
+AUTH_USER_MODEL = 'users.BaseUser'
 
 
 # Internationalization
