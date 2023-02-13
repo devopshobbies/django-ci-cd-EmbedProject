@@ -9,6 +9,7 @@ from devopshobbies.users.models import BaseUser , Profile
 from devopshobbies.api.mixins import ApiAuthMixin
 from devopshobbies.users.selectors import get_profile
 from devopshobbies.users.services import register 
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from drf_spectacular.utils import extend_schema
 
@@ -23,7 +24,7 @@ class ProfileApi(ApiAuthMixin, APIView):
     @extend_schema(responses=OutPutSerializer)
     def get(self, request):
         query = get_profile(user=request.user)
-        return Response(self.OutPutSerializer(query, context={"request":request}, many=True).data)
+        return Response(self.OutPutSerializer(query, context={"request":request}).data)
 
 
 class RegisterApi(APIView):
@@ -57,9 +58,11 @@ class RegisterApi(APIView):
 
 
     class OutPutRegisterSerializer(serializers.ModelSerializer):
+
         class Meta:
             model = BaseUser 
             fields = ("email", "created_at", "updated_at")
+
 
     @extend_schema(request=InputRegisterSerializer, responses=OutPutRegisterSerializer)
     def post(self, request):
