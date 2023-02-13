@@ -5,9 +5,26 @@ from rest_framework import serializers
 
 from django.core.validators import MinLengthValidator
 from .validators import number_validator, special_char_validator, letter_validator
-from devopshobbies.users.models import BaseUser 
+from devopshobbies.users.models import BaseUser , Profile
+from devopshobbies.api.mixins import ApiAuthMixin
+from devopshobbies.users.selectors import get_profile
+from devopshobbies.users.services import register 
+
 
 from drf_spectacular.utils import extend_schema
+
+
+class ProfileApi(ApiAuthMixin, APIView):
+
+    class OutPutSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Profile 
+            fields = ("bio", "posts_count", "subscriber_count", "subscription_count")
+
+    @extend_schema(responses=OutPutSerializer)
+    def get(self, request):
+        query = get_profile(user=request.user)
+        return Response(self.OutPutSerializer(query, context={"request":request}, many=True).data)
 
 
 class RegisterApi(APIView):
@@ -15,6 +32,7 @@ class RegisterApi(APIView):
 
     class InputRegisterSerializer(serializers.Serializer):
         email = serializers.EmailField(max_length=255)
+        bio = serializers.CharField(max_length=1000, required=False)
         password = serializers.CharField(
                 validators=[
                         number_validator,
@@ -47,9 +65,10 @@ class RegisterApi(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            query = create_user(
+            query = register(
                     email=serializer.validated_data.get("email"),
                     password=serializer.validated_data.get("password"),
+                    bio=serializer.validated_data.get("bio"),
                     )
         except Exception as ex:
             return Response(
