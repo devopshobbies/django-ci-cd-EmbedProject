@@ -15,7 +15,8 @@ services:
 
   rabbitmq:
     image: "rabbitmq:alpine"
-
+    ports:
+      - 5672:5672
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 30s
