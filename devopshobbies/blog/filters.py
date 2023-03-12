@@ -18,7 +18,7 @@ class PostFilter(FilterSet):
         authors = value.split(",")
         if len(authors) > limit:
             raise APIException(f"You cannot add more than {len(authors)} usernames")
-        return queryset.filter(author__username__in=authors)
+        return queryset.filter(author__email__in=authors)
 
     def filter_created_at__range(self, queryset, name, value):
         limit = 2
