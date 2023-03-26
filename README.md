@@ -38,4 +38,8 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-
+8- Celery and celery beat
+```bash
+  celery -A devopshobbies.tasks worker -l info --without-gossip --without-mingle --without-heartbeat
+  celery -A devopshobbies.tasks beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+```

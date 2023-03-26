@@ -21,6 +21,7 @@ LOCAL_APPS = [
     'devopshobbies.blog.apps.BlogConfig',
     'devopshobbies.users.apps.UsersConfig',
     'devopshobbies.authentication.apps.AuthenticationConfig',
+    'devopshobbies.tasks.apps.TasksConfig',
 ]
 
 THIRD_PARTY_APPS = [
@@ -29,6 +30,8 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django_extensions',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 INSTALLED_APPS = [
