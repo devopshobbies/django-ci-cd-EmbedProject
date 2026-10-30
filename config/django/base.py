@@ -169,12 +169,8 @@ APP_DOMAIN = env("APP_DOMAIN", default="http://localhost:8000")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-from config.settings.cors import *  # noqa
-from config.settings.jwt import *  # noqa
-from config.settings.sessions import *  # noqa
-from config.settings.celery import *  # noqa
-from config.settings.swagger import *  # noqa
-#from config.settings.sentry import *  # noqa
-
-#from config.settings.files_and_storages import *  # noqa
-#from config.settings.email_sending import *  # noqa
+"""
+    We import any configuration settings 
+    that we need in the project.
+"""
+from config.settings import *
